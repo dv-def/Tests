@@ -19,7 +19,8 @@ import com.geekbrains.tests.view.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
+import java.util.Locale
+
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
@@ -37,7 +38,9 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         toDetailsActivityButton.setOnClickListener {
             startActivity(DetailsActivity.getIntent(this, totalCount))
         }
-        setQueryListener()
+        searchButton.setOnClickListener {
+            search()
+        }
         setRecyclerView()
     }
 
@@ -46,24 +49,19 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         recyclerView.adapter = adapter
     }
 
-    private fun setQueryListener() {
-        searchEditText.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = searchEditText.text.toString()
-                if (query.isNotBlank()) {
-                    presenter.searchGitHub(query)
-                    return@OnEditorActionListener true
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.enter_search_word),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@OnEditorActionListener false
-                }
-            }
-            false
-        })
+    private fun search() {
+        val query = searchEditText.text.toString()
+        if (query.isNotBlank()) {
+            presenter.searchGitHub(query)
+            return
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                getString(R.string.enter_search_word),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
     }
 
     private fun createRepository(): RepositoryContract {
