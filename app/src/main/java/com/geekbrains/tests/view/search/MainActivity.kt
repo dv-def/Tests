@@ -2,8 +2,6 @@ package com.geekbrains.tests.view.search
 
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.geekbrains.tests.BuildConfig
@@ -20,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Locale
-
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
