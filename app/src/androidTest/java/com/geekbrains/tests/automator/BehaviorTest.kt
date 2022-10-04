@@ -9,10 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.Until
+import androidx.test.uiautomator.*
 import com.geekbrains.tests.R
 import org.junit.Assert
 import org.junit.Before
@@ -108,6 +105,44 @@ class BehaviorTest {
         //Чтобы проверить отображение определенного количества репозиториев,
         //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
         Assert.assertEquals(changedText.text, "Number of results: 0")
+    }
+
+    @Test
+    fun test_NumberInDetailsScreenIsEqualsToCountOfFoundItems() {
+        // Находим searchEditText
+        val searchEditText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+
+        // Устанавливаем в нее текст
+        searchEditText.text = "UiAutomator"
+
+        // Находим кнопку поиска
+        val searchButton = uiDevice.findObject(By.res(packageName, "searchButton"))
+
+        // Делаем клик по кнопке поиска
+        searchButton.click()
+
+        // Ожидаем появления элементов списка recyclerView на экране
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "repositoryName")),
+            TIMEOUT
+        )
+
+        // Находим кнопку перехода на detailsScreen
+        val toDetailsScreenButton: UiObject2 =
+            uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
+
+        // Клик по кнопке перехода
+        toDetailsScreenButton.click()
+
+        // Дожидаемся появления totalCountTextView на экране
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView")),
+            TIMEOUT
+        )
+
+        val totalCount = uiDevice.findObject(By.res(packageName, "totalCountTextView"))
+
+        Assert.assertEquals(totalCount.text, "Number of results: 728")
     }
 
     companion object {
